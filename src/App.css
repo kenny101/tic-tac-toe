@@ -1,0 +1,51 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "heading heading heading"
+    "ticbox . actions";
+  grid-area: heading;
+  font-family: Andale Mono, monospace;
+}
+
+.heading {
+  grid-area: heading;
+  font-size: x-large;
+  text-align: center;
+}
+
+.prompt {
+  justify-content: center;
+  margin-left: 50px;
+  margin-top: 40px;
+  grid-area: ticbox;
+}
+
+.grid-container {
+  width: 500px;
+  height: 500px;
+  margin: 100px 50px 50px 50px;
+  grid-area: ticbox;
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+}
+
+h2 {
+  display: inline;
+}
+
+.box {
+  border: 3px solid #010b16;
+  border-radius: 2px;
+  font-size: 4em;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.win-prompt {
+  grid-area: ticbox;
+  margin-left: 50px;
+  margin-top: 625px;
+}
