@@ -1,6 +1,8 @@
 # Tic-Tac-Toe Game in React JS
 Tic-Tac-Toe Game in React JS
 
+GH-Pages: https://kenny101.github.io/tic-tac-toe/
+
 ## Available Scripts
 
 In the project directory, you can run:
