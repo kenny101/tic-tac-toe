@@ -4,7 +4,7 @@
   grid-template-rows: auto;
   grid-template-areas:
     "heading heading heading"
-    "ticbox . actions";
+    "ticbox ticbox actions";
   grid-area: heading;
   font-family: Andale Mono, monospace;
 }
@@ -14,6 +14,8 @@
   font-size: x-large;
   text-align: center;
 }
+
+
 
 .prompt {
   justify-content: center;
@@ -48,4 +50,9 @@ h2 {
   grid-area: ticbox;
   margin-left: 50px;
   margin-top: 625px;
+}
+.playAgainBtn {
+  grid-area: ticbox;
+  margin-left: 210px;
+  margin-top: -30px;  
 }

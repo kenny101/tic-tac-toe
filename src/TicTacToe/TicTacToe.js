@@ -2,11 +2,12 @@ import React, { useState } from "react";
 
 const TicTacToe = () => {
   const [turn, setTurn] = useState("x");
-  const [cells, setCells] = useState(Array(9).fill(""));
-  const [winner, setWinner] = useState();
+  const [cells, setCells] = useState(Array(9).fill(null));
+  const [history, setHistory] = useState(Array(9).fill(null));
+  const [winner, setWinner] = useState(null);
 
   const declareWinner = (squares) => {
-    let winSpots = [
+    const lines = [
       [0, 1, 2],
       [3, 4, 5],
       [6, 7, 8],
@@ -16,46 +17,69 @@ const TicTacToe = () => {
       [0, 4, 8],
       [2, 4, 6],
     ];
-
-    for (let index = 0; index < winSpots.length; index++) {
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
       if (
-        squares[winSpots[index][0]] === "x" &&
-        squares[winSpots[index][1]] === "x" &&
-        squares[winSpots[index][2]] === "x"
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
       ) {
-        setWinner("x");
-      } else if (
-        squares[winSpots[index][0]] === "o" &&
-        squares[winSpots[index][1]] === "o" &&
-        squares[winSpots[index][2]] === "o"
-      ) {
-        setWinner("o");
+        setWinner(squares[a]);
       }
     }
   };
 
   const handleClick = (num) => {
-    if (cells[num] === "") {
-      let squares = [...cells];
-      if (turn === "x") {
-        squares[num] = "x";
-        setTurn("o");
-      } else {
-        setTurn("x");
-        squares[num] = "o";
-      }
-      setCells(squares);
-      declareWinner(squares);
+    if (cells[num] !== null || winner) {
+      return;
     }
+
+    let squares = [...cells];
+    if (turn === "x") {
+      squares[num] = "x";
+      setTurn("o");
+    } else {
+      setTurn("x");
+      squares[num] = "o";
+    }
+    setCells(squares);
+    history.push(squares);
+    declareWinner(squares);
   };
 
-  const Cell = ({ num }) => {
+  const Square = ({ num }) => {
     return (
       <div class="box" onClick={() => handleClick(num)}>
         {cells[num]}
       </div>
     );
   };
+
+  const moves = history.map((step, move) => {
+    // return if history is null
+    if (step === null) {
+     return;
+    }
+
+    const desc = move ? "Go to move #" + (move - 9) : "Go to game start";
+    return (
+      <li>
+        <button onClick={() => jumpTo(move)}>{desc}</button>
+      </li>
+    );
+  });
+
+  const jumpTo = (move) => {
+    setCells(history[move]);
+    setTurn(move % 2 === 0 ? "x" : "o");
+  };
+
+  const resetGame = () => {
+    setCells(Array(9).fill(null));
+    setHistory(Array(9).fill(null));
+    setWinner(null);
+  };
+
   return (
     <div>
       <div class="wrapper">
@@ -68,15 +92,15 @@ const TicTacToe = () => {
           </h2>
         </div>
         <div class="grid-container">
-          <Cell num={0} />
-          <Cell num={1} />
-          <Cell num={2} />
-          <Cell num={3} />
-          <Cell num={4} />
-          <Cell num={5} />
-          <Cell num={6} />
-          <Cell num={7} />
-          <Cell num={8} />
+          <Square num={0} />
+          <Square num={1} />
+          <Square num={2} />
+          <Square num={3} />
+          <Square num={4} />
+          <Square num={5} />
+          <Square num={6} />
+          <Square num={7} />
+          <Square num={8} />
         </div>
         {winner && (
           <>
@@ -85,11 +109,30 @@ const TicTacToe = () => {
                 {" "}
                 Winner:
                 <span style={{ color: "red" }}> {winner} </span>
+                <div class="playAgainBtn">
+                  <button onClick={() => resetGame()}>Play Again</button>
+                </div>
               </h2>
             </div>
           </>
         )}
-        <div class="action-list"></div>
+        {winner === null && cells.every((cell) => cell !== null) && (
+          <>
+            <div class="win-prompt">
+              <h2>
+                {" "}
+                Tie!
+                <div class="playAgainBtn">
+
+                  <button onClick={() => resetGame()}>Play Again</button>
+                </div>
+              </h2>
+            </div>
+          </>
+        )}
+        <div class="action-list">
+          <ol>{moves}</ol>
+        </div>
       </div>
     </div>
   );
